@@ -1,0 +1,40 @@
+.activeWorm {
+    transition: 0.1s;
+    animation: move 0.3s;
+    border-radius: 45%;
+    background: blue !important;
+}
+.bodyWorm {
+    border-radius: 45%;
+    animation: moveBody 0.2s;
+    background: #ff4800;
+}
+.apple {
+    width: 10px;
+    height: 10px;
+    background: red;
+    border-radius: 50%;
+}
+#count {
+    margin: 0 auto;
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+}
+
+@keyframes move {
+    0% {
+        transform: scale(0.99);
+    }
+    100% {
+        transform: scale(1.5);
+    }
+}
+@keyframes moveBody {
+    0% {
+        transform: scale(0.99);
+    }
+    100% {
+        transform: scale(1.2);
+    }
+}
