@@ -1,3 +1,9 @@
+body {
+    background: linear-gradient(120deg, grey, yellow);
+    height: 100vh;
+    overflow: hidden;
+}
+
 .container {
     margin: 0 auto;
     display: flex;
