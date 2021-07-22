@@ -213,8 +213,8 @@ const addApple = (w, count, width, height, barrier) => {
     frame.style.left = '0'
     const apple = document.createElement('div')
     apple.classList.add('apple')
-    const x = Math.floor(Math.random() * (width - 1)) * 10
-    const y = Math.floor(Math.random() * (height - 1)) * 10
+    const x = Math.floor(Math.random() * (width)) * 10
+    const y = Math.floor(Math.random() * (height)) * 10
     apple.style.position = 'absolute'
     apple.style.left = `${x}px`
     apple.style.top = `${y}px`
