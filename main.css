@@ -21,17 +21,36 @@
     animation: move 0.3s;
     border-radius: 45%;
     background: blue !important;
+    box-shadow: 0 0 1px 1px green;
 }
 .bodyWorm {
     border-radius: 45%;
     animation: moveBody 0.2s;
     background: #ff4800;
+    box-shadow: 0 0 1px 1px orange;
 }
 .apple {
     width: 10px;
     height: 10px;
     background: red;
     border-radius: 50%;
+    box-shadow: 0 0 4px 2px red;
+    display: flex;
+    animation: appleMove 1s;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.apple:before {
+    content: "";
+    display: block;
+    width: 1px;
+    position: relative;
+    left: 3px;
+    top: 2px;
+    height: 1px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 3px 2px white;
 }
 #count {
     margin: 0 auto;
@@ -43,20 +62,55 @@
     background: darkgrey;
     box-shadow: 0 0 1px 1px black;
 }
+.portal {
+    background: black;
+    width: 10px;
+    height: 10px;
+    animation: portalMove 1s;
+    transform: scale(1.5);
+    box-shadow: 0 0 5px 3px yellow;
+    border-radius: 50%;
+}
 
 @keyframes move {
-    0% {
+    20% {
+        border-radius: 50%;
         transform: scale(0.99);
     }
     100% {
-        transform: scale(1.5);
+        border-radius: 40%;
+        transform: scale(1.2);
     }
 }
 @keyframes moveBody {
     0% {
+        border-radius: 40%;
         transform: scale(0.99);
     }
     100% {
-        transform: scale(1.2);
+        border-radius: 50%;
+        transform: scale(1.1);
+    }
+}
+
+@keyframes appleMove {
+    0% {
+        border-radius: 40%;
+        transform: scale(2);
+    }
+    100% {
+        border-radius: 50%;
+        transform: scale(0.8);
+    }
+}
+
+@keyframes portalMove {
+    0% {
+        border-radius: 40%;
+        transform: scale(0);
+    }
+    100% {
+        border-radius: 50%;
+        transform: scale(1.5);
     }
 }

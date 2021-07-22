@@ -143,8 +143,8 @@ const barriers = [
     ]
 // level 0 maxApples 5 initialSpeed 350
 let level = 0
-let maxApples = 10
-let initialSpeed = 350
+let maxApples = 3
+let initialSpeed = 300
 let interval
 const buildField = (width, height, count, barrier) => {
     const container = document.getElementById('container')
@@ -158,9 +158,11 @@ const buildField = (width, height, count, barrier) => {
     field.setAttribute("id", "field")
     field.style.width = `${width * 10}px`
     field.style.height = `${height * 10}px`
-    field.style.backgroundColor = "lightgreen"
+    // field.style.backgroundColor = "lightgreen"
+    field.style.background = "url(grass.jpg)center / cover no-repeat"
     field.style.margin = "0 auto"
     field.style.border = "10px solid darkgreen"
+    field.style.boxShadow = "0 0 5px 2px darkgreen"
     field.style.position = "relative"
     // document.body.append(container)
     container.append(btnReset)
@@ -217,9 +219,11 @@ const addApple = (w, count, width, height, barrier) => {
     apple.style.left = `${x}px`
     apple.style.top = `${y}px`
     if (count === 0) {
-        apple.style.backgroundColor = "black"
-        apple.style.boxShadow = "0 0 4px 2px yellow"
-        apple.style.transform = "scale(1.5)"
+        // apple.style.backgroundColor = "black"
+        apple.classList.add('portal')
+        apple.classList.remove('apple')
+        // apple.style.boxShadow = "0 0 4px 2px yellow"
+        // apple.style.transform = "scale(1.5)"
     }
     for (let j = 0; j < w.length; j++) {
         if (w[j].x === x && w[j].y === y) {
@@ -284,79 +288,81 @@ const moving = (worm, apple, w, width, height, count, field, speed, dir, barrier
         } else if ((event.key === "ArrowDown" || event.key === "s" || event.key === "ы") && dir !== "up" && !keyPressed) {
             dir = "down"
             keyPressed = true
-        } else if (event.key === " ") {
-            alert("pause")
         }
     });
     interval = setInterval(() => {
-        let direction
-        switch (dir) {
-            case "left":
-                direction = { ...w[0], x: w[0].x - 10 }
-                keyPressed = false
-                break
-            case "right":
-                direction = { ...w[0], x: w[0].x + 10 }
-                keyPressed = false
-                break
-            case "up":
-                direction = { ...w[0], y: w[0].y - 10 }
-                keyPressed = false
-                break
-            case "down":
-                direction = { ...w[0], y: w[0].y + 10 }
-                keyPressed = false
-                break
-            default:
-                console.log("ERROR DIRECTION")
-        }
-        for (let j = 1; j < w.length; j++) {
-            if (w[j].x === w[0].x && w[j].y === w[0].y) {
-                clearInterval(interval)
-                document.getElementById('infoGame').innerText = `You ate yourself dude!`
+            let direction
+            switch (dir) {
+                case "left":
+                    direction = { ...w[0], x: w[0].x - 10 }
+                    keyPressed = false
+                    break
+                case "right":
+                    direction = { ...w[0], x: w[0].x + 10 }
+                    keyPressed = false
+                    break
+                case "up":
+                    direction = { ...w[0], y: w[0].y - 10 }
+                    keyPressed = false
+                    break
+                case "down":
+                    direction = { ...w[0], y: w[0].y + 10 }
+                    keyPressed = false
+                    break
+                default:
+                    console.log("ERROR DIRECTION")
             }
-        }
-        for (let k = 0; k < barrier.length; k++) {
-            if (barrier[k].x === w[0].x && barrier[k].y === w[0].y) {
+            for (let j = 1; j < w.length; j++) {
+                if (w[j].x === w[0].x && w[j].y === w[0].y) {
+                    clearInterval(interval)
+                    document.getElementById('infoGame').innerText = `You ate yourself dude!`
+                }
+            }
+            for (let k = 0; k < barrier.length; k++) {
+                if (barrier[k].x === w[0].x && barrier[k].y === w[0].y) {
+                    clearInterval(interval)
+                    document.getElementById('infoGame').innerText = `You lost`
+                    document.getElementById('btnReset').focus()
+                    return
+                }
+            }
+            if (w[0].x === apple.x && w[0].y === apple.y) {
+                document.getElementById('apple').remove()
+                document.getElementById('count').remove()
+                if (count === 0) {
+                    clearInterval(interval)
+                    document.getElementById('infoGame').innerText = `You won level`
+                    document.getElementById('btnLevel').classList.toggle('hidden')
+                    document.getElementById('btnLevel').focus()
+                    document.getElementById('btnReset').classList.toggle('hidden')
+                    return
+                }
+                count--
+                apple = addApple(w, count, width, height, barrier)
+                field.append(apple.apple)
+                w.push(w[w.length - 1])
+                if (speed > 100) {
+                    clearInterval(interval)
+                    speed -= 10
+                    moving(worm, apple, w, width, height, count, field, speed, dir, barrier)
+                }
+            }
+
+
+            if (w[0].x === -10 || w[0].y === -10 || w[0].x === width * 10 || w[0].y === height * 10) {
                 clearInterval(interval)
                 document.getElementById('infoGame').innerText = `You lost`
-                return
+                document.getElementById('btnReset').focus()
             }
-        }
-        if (w[0].x === apple.x && w[0].y === apple.y) {
-            document.getElementById('apple').remove()
-            document.getElementById('count').remove()
-            if (count === 0) {
-                clearInterval(interval)
-                document.getElementById('infoGame').innerText = `You won level`
-                document.getElementById('btnLevel').classList.toggle('hidden')
-                document.getElementById('btnReset').classList.toggle('hidden')
-                return
+
+            w.splice(0, 0, direction)
+            if (worm) {
+                worm.remove()
             }
-            count--
-            apple = addApple(w, count, width, height, barrier)
-            field.append(apple.apple)
-            w.push(w[w.length - 1])
-            if (speed > 100) {
-                clearInterval(interval)
-                speed -= 10
-                moving(worm, apple, w, width, height, count, field, speed, dir, barrier)
-            }
-        }
+            worm = drawWorm(w, width, height)
+            field.append(worm)
+            w.splice(w.length - 1, 1)
 
-
-        if (w[0].x === -10 || w[0].y === -10 || w[0].x === width * 10 || w[0].y === height * 10) {
-            clearInterval(interval)
-            document.getElementById('infoGame').innerText = `You lost`
-        }
-
-        w.splice(0, 0, direction)
-        if (worm) {
-            worm.remove()
-        }
-        worm = drawWorm(w, width, height)
-        field.append(worm)
-        w.splice(w.length - 1, 1)
     }, speed)
 }
 const drawBarriers = (barrier, width, height) => {
